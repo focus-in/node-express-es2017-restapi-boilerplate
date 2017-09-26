@@ -54,6 +54,19 @@ module.exports = {
       json: false
     }
   },
+  // logging configurations for Winston - https://github.com/winstonjs/winston
+  logger: {
+    // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
+    format: process.env.LOG_FORMAT,
+    // file logger configurations
+    fileLogger: {
+      directoryPath: process.env.LOG_PATH,
+      fileName: process.env.LOG_FILE,
+      maxsize: 10485760,
+      maxFiles: 2,
+      json: false
+    }
+  },
   // mailing with nodemailer - https://github.com/nodemailer/nodemailer
   mailer: {
     from: process.env.MAILER_FROM,

@@ -1,16 +1,17 @@
 // make bluebird default Promise
 Promise = require('bluebird'); // eslint-disable-line no-global-assign
+const app = require('./app');
 
 /**
- * Boot the app
+ *
  */
 
-const config = require('./config/config');
-const app = require('./boot/app');
-
-// load the configs
-config.load();
-// boot the app
-app.boot();
-// start the app
-// app.boot().start();
+console.log('--app started');
+app.init();
+// app.config()
+//   .then(app.boot)
+//   .then(app.start)
+//   .catch((err) => {
+//     console.log(err);
+//     process.exit();
+//   });
