@@ -1,0 +1,28 @@
+Nodejs Express es6 framework
+
+- uses Modular Architecture
+
+config
+  config.js - booter config class (which holds all the config variables)
+  assets - project asset files wildcard path
+  env - environment variables keys & default values
+  lib -
+
+lib - generic libraries used in modules
+
+
+
+modules - all our modules lies here
+  core - modules core architecture & functions
+
+  user - User module
+    configs - configuration
+    routes - module routes
+    controllers - module action controller
+    helpers - module helper functions & middlewares stays here
+    models - models & schema files
+      schema
+
+
+
+The method & property prefixed with _ act as private

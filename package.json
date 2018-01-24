@@ -5,11 +5,12 @@
   "main": "index.js",
   "private": false,
   "engines": {
-    "node": ">=7.6",
+    "node": ">=6.11",
     "yarn": "*"
   },
   "scripts": {
     "start": "node index.js",
+    "prod": "NODE_ENV=production node index.js",
     "lint": "eslint **/*.js --ignore-path .gitignore",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

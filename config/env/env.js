@@ -1,7 +1,8 @@
+// dependencies
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
-const msg = require('../message');
+const msg = require('../lib/messages');
 
 /**
  * Load Environment (.env) variables
@@ -10,22 +11,26 @@ class Env
 {
 
   constructor() {
-    this.envPath = this._getEnvConfigPath();
+    // load the env variables
+    this.variables = {};
+    // get the env config path
+    this._envPath = this._getEnvConfigPath();
   }
 
-  load() {
+  // init the env configuration
+  init() {
     // check env config file exists
     this._checkEnvFileExists();
     // load the env config file
-    this._loadEnvFile();
-    // Console ENV
-    console.log(chalk.white('--'));
-    console.log(chalk.green(msg.INFO.APP_RUNNING_ENV));
-    console.log(chalk.white('--'));
+    this._initEnvFile();
+
+    return true;
   }
 
-  getEnvConfig() {
-    return require(path.join(__dirname, 'configs'));
+  // load the env variables
+  load() {
+    this.variables = require('./variables');
+    return this.variables;
   }
 
   // get env config path
@@ -35,17 +40,12 @@ class Env
       process.env.NODE_ENV = 'local';
       console.error(chalk.yellowBright(msg.WARNING.NO_NODE_ENV));
     }
-    return path.join(__dirname, '.env.' + process.env.NODE_ENV);
-  }
-
-  // allow empty values to dotenv-safe
-  _allowEmptyValues() {
-    return (process.env.NODE_ENV === 'production') ? false : true;
+    return path.join(__dirname, `.env.${process.env.NODE_ENV}`);
   }
 
   // check config file is exists
   _checkEnvFileExists() {
-    if (!fs.existsSync(this.envPath)) {
+    if (!fs.existsSync(this._envPath)) {
       console.error(chalk.red(msg.ERROR.NO_ENV_CONFIG));
       // exit from application
       process.exit(1);
@@ -54,14 +54,20 @@ class Env
   }
 
   // load env file dotenv-safe
-  _loadEnvFile() {
+  _initEnvFile() {
     require('dotenv-safe').load({
       allowEmptyValues: this._allowEmptyValues(),
-      path: this.envPath,
+      path: this._envPath,
       sample: path.join(__dirname, '.env.sample'),
     });
+    return true;
+  }
+
+  // allow empty values to dotenv-safe
+  _allowEmptyValues() {
+    return (process.env.NODE_ENV !== 'production');
   }
 
 }
 
-module.exports = new Env;
+module.exports = Env;

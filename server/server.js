@@ -4,12 +4,12 @@ const express = require('express');
 const compress = require('compression');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-const assets = require('../config/assets');
+// const assets = require('../config/assets/assets');
 
 class Server
 {
 
-  constructor(express) {
+  constructor() {
     this.express = express();
   }
 
@@ -17,16 +17,16 @@ class Server
 
     console.log('server init');
     // Initialize Express middleware
-    this.initMiddleware();
+    this._initMiddleware();
 
     // Initialize request variables
-    this.initRequestVariables();
+    this._initRequestVariables();
 
     // Initialize Modules configuration
-    this.initModuleConfigs();
+    // this.initModuleConfigs();
 
     // Initialize modules server routes
-    this.initModuleRoutes();
+    // this.initModuleRoutes();
 
     return this;
   }
@@ -40,7 +40,7 @@ class Server
   /**
    * Initialize application middleware
    */
-  initMiddleware() {
+  _initMiddleware() {
     // compress the request content data
     this.express.use(compress({
       filter: function (req, res) {
@@ -65,16 +65,16 @@ class Server
 
     // disable x-powered-by header
     this.express.disable('x-powered-by');
-  };
+  }
 
   /**
    * Add Local variable to resonse header
    */
-  initRequestVariables() {
+  _initRequestVariables() {
     // Passing the request url to environment locals
-    this.express.use(function (req, res, next) {
-      res.locals.host = req.protocol + '://' + req.hostname;
-      res.locals.url = req.protocol + '://' + req.headers.host + req.originalUrl;
+    this.express.use((req, res, next) => {
+      res.locals.host = `${req.protocol}://${req.hostname}`;
+      res.locals.url = `${req.protocol}://${req.headers.host}${req.originalUrl}`;
       next();
     });
   }
@@ -82,17 +82,25 @@ class Server
   /**
    * Invoke module configuration
    */
-  initModuleConfigs() {
-    assets.load('config', this.express);
-  };
+  // initModuleConfigs() {
+  //   assets.load('config', this.express);
+  // }
 
   /**
    * Invoke module routes
    */
-  initModuleRoutes() {
-    assets.load('routes', this.express);
-  };
+  // initModuleRoutes() {
+  //   assets.load('routes', this.express);
+  // }
+
+
+
+  // console.log(chalk.white('--'));
+  // console.log(chalk.green(msg.INFO.APP_RUNNING_ENV));
+  // console.log(chalk.white('--'));
+
+
 
 }
 
-module.exports = new Server(express);
+module.exports = Server;

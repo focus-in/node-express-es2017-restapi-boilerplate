@@ -14,14 +14,14 @@ module.exports = {
       caBundle: process.env.APP_SECURE_BULDLE
     }
   },
+  // env
+  env: process.env.NODE_ENV,
   // port which app to run
   port: process.env.PORT,
   // host name
   host: process.env.HOST,
   // URL. ex: https://www.myapp.com (including port if required).
   domain: process.env.DOMAIN,
-  // live reload on file changes
-  livereload: true,
   // DB configurations - mongodb://localhost:27017/db-name
   db: {
     // mongodb connection uri
@@ -49,9 +49,9 @@ module.exports = {
     fileLogger: {
       directoryPath: process.env.LOG_PATH,
       fileName: process.env.LOG_FILE,
-      maxsize: 10485760,
-      maxFiles: 2,
-      json: false
+      maxsize: process.env.LOG_MAX_SIZE,
+      maxFiles: process.env.LOG_MAX_FILES,
+      json: process.env.LOG_JSON
     }
   },
   // mailing with nodemailer - https://github.com/nodemailer/nodemailer
