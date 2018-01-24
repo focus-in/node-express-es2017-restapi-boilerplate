@@ -29,16 +29,16 @@ class Asset
   }
 
   // get all the globbed file path
-  load() {
+  load(fileType) {
     // check fileType in files
-    // if (_.has(this.assertFiles, fileType)) {
-    //   const files = glob.sync(this.files[fileType]);
-    //   files.map((file) => {
-    //     const fileName = _.replace(file, '.js', '');
-    //     return require(path.resolve(fileName));
-    //   });
-    // }
-    // return true;
+    if (_.has(this.files, fileType)) {
+      this.files[fileType].map((file) => {
+        const FileClass =  require(path.resolve(file));
+        return new FileClass();
+      });
+    }
+
+    return true;
   }
 
 

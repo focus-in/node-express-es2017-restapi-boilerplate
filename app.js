@@ -1,8 +1,7 @@
 // dependencies
 const Config = require('./config/config');
 const Server = require('./server/server');
-// const logger = require('./logger');
-// const mongoose = require('./mongoose');
+const Module = require('./modules/module');
 
 /**
  * Load all the dependencies to boot the application
@@ -12,34 +11,35 @@ class App
 {
 
   constructor() {
+    // instantiate config
     this.config = new Config();
+    // instantiate server
     this.server = new Server();
-    // this.logger = logger;
+    // instantiate module
+    this.module = new Module();
   }
 
+  // init application with dependent libraries
   init() {
     // init config
     this.config.init();
     // init server
     this.server.init();
 
-    console.log('init success');
-    // Console ENV
-    // console.log(chalk.white('--'));
-    // console.log(chalk.green(msg.INFO.APP_RUNNING_ENV));
-    // console.log(chalk.white('--'));
-
-
+    return this;
   }
 
+  // load application libraries with data
   load() {
+    // load config libraries
     this.config.load();
+    // load modules default files
+    this.module.load(this.config);
 
-    console.log('load success');
+    return this;
   }
 
-
-
+  // start application servers
   start() {
     console.log('will begin start');
     // open mongoose connection
@@ -47,6 +47,7 @@ class App
 
     // listen to requests
     // app.listen(port, () => console.info(`server started on port ${port} (${env})`));
+    return this;
   }
 }
 

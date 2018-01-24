@@ -6,11 +6,11 @@
 module.exports = {
 
   ERROR: {
-    NO_ENV_CONFIG: `ERROR: No env file found for ${process.env.NODE_ENV} - kill application`
+    NO_ENV_CONFIG: `ERROR: No env file found for %s - kill application`
   },
 
   WARNING: {
-    NO_NODE_ENV: `WARNING: NODE_ENV is not defined! Using default (local) environment.`
+    NO_NODE_ENV: `WARNING: NODE_ENV is not defined! Using default (%s) environment.`
   },
 
   INFO: {

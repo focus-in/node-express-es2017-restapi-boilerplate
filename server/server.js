@@ -1,32 +1,32 @@
-const cors = require('cors');
-const helmet = require('helmet');
-const express = require('express');
-const compress = require('compression');
-const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
-// const assets = require('../config/assets/assets');
+// dependencies
+const Logger = require('./lib/logger');
+const Express = require('./lib/express');
 
 class Server
 {
 
   constructor() {
-    this.express = express();
+    this.logger = new Logger();
+    // this.error = new Logger();
+    // this.exception = new Logger();
+    this.express = new Express();
+    // this.mongoose = new Express();
   }
 
   init() {
+    // init express
+    this.express.init();
 
-    console.log('server init');
-    // Initialize Express middleware
-    this._initMiddleware();
+    return this;
+  }
 
-    // Initialize request variables
-    this._initRequestVariables();
+  load() {
 
-    // Initialize Modules configuration
-    // this.initModuleConfigs();
+    // load Module configuration files
+    this._loadModuleConfigs();
 
-    // Initialize modules server routes
-    // this.initModuleRoutes();
+    // Load modules routes files
+    this._loadModuleRoutes();
 
     return this;
   }
@@ -38,60 +38,18 @@ class Server
   }
 
   /**
-   * Initialize application middleware
-   */
-  _initMiddleware() {
-    // compress the request content data
-    this.express.use(compress({
-      filter: function (req, res) {
-        return (/json|text|javascript/).test(res.getHeader('Content-Type'));
-      },
-      level: 9
-    }));
-
-    // parse body params and attache them to req.body
-    this.express.use(bodyParser.json());
-    this.express.use(bodyParser.urlencoded({ extended: true }));
-
-    // lets you use HTTP verbs such as PUT or DELETE
-    // in places where the client doesn't support it
-    this.express.use(methodOverride());
-
-    // secure apps by setting various HTTP headers
-    this.express.use(helmet());
-
-    // enable CORS - Cross Origin Resource Sharing
-    this.express.use(cors());
-
-    // disable x-powered-by header
-    this.express.disable('x-powered-by');
-  }
-
-  /**
-   * Add Local variable to resonse header
-   */
-  _initRequestVariables() {
-    // Passing the request url to environment locals
-    this.express.use((req, res, next) => {
-      res.locals.host = `${req.protocol}://${req.hostname}`;
-      res.locals.url = `${req.protocol}://${req.headers.host}${req.originalUrl}`;
-      next();
-    });
-  }
-
-  /**
    * Invoke module configuration
    */
-  // initModuleConfigs() {
-  //   assets.load('config', this.express);
-  // }
+  _loadModuleConfigs() {
+    assets.load('config', this.express);
+  }
 
   /**
    * Invoke module routes
    */
-  // initModuleRoutes() {
-  //   assets.load('routes', this.express);
-  // }
+  _loadModuleRoutes() {
+    assets.load('routes', this.express);
+  }
 
 
 
