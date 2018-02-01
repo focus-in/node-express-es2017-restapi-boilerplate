@@ -30,6 +30,10 @@ module.exports = {
     port: process.env.MONGO_PORT,
     name: process.env.MONGO_DB_NAME,
     debug: process.env.MONGO_DEBUG,
+    credentials: {
+      username: process.env.MONGO_USER,
+      password: process.env.MONGO_PASS
+    },
     options: {}
   },
   // JWT Auth session config - https://github.com/themikenicholson/passport-jwt

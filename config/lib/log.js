@@ -36,7 +36,7 @@ class Log
       console.log();
       console.log(chalk.yellow(this.env.msg.WARNING.INVALID_LOG_FORMAT));
       console.log();
-      if (process.env.NODE_ENV == 'production') {
+      if (process.env.NODE_ENV === 'production') {
         // exit from application
         process.exit(1);
       }

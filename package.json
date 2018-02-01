@@ -67,6 +67,7 @@
     "passport-google-oauth": "^1.0.0",
     "passport-jwt": "^3.0.0",
     "pm2": "^2.6.1",
+    "query-types": "^0.1.4",
     "socket.io": "^2.0.3",
     "validator": "^8.1.0",
     "winston": "^2.3.1"

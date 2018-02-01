@@ -1,3 +1,6 @@
+// dependencies
+
+
 /**
  * Configure error handling
  */
@@ -14,4 +17,9 @@ initErrorRoutes = function (app) {
     // Redirect to error page
     res.redirect('/server-error');
   });
+
+      // Showing stack errors
+      app.set('showStackError', true);
+
+
 };
