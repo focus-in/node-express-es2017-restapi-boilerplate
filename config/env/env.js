@@ -4,7 +4,7 @@ const path = require('path');
 const chalk = require('chalk');
 const dotEnv = require('dotenv-safe');
 
-const msg = require('../lib/messages');
+const msg = require('../messages');
 
 /**
  * Load Environment (.env) variables
@@ -42,7 +42,7 @@ class Env
     // check NODE_ENV
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'local';
-      console.error(chalk.yellowBright(msg.WARNING.NO_NODE_ENV, process.env.NODE_ENV));
+      console.error(chalk.yellowBright(msg.WARNING.NO_NODE_ENV), process.env.NODE_ENV);
     }
     return path.join(__dirname, `.env.${process.env.NODE_ENV}`);
   }
@@ -51,7 +51,7 @@ class Env
   _checkEnvFileExists() {
     if (!fs.existsSync(this._envPath)) {
       // error message & exit
-      console.error(chalk.red(msg.ERROR.NO_ENV_CONFIG, process.env.NODE_ENV));
+      console.error(chalk.red(msg.ERROR.NO_ENV_CONFIG), process.env.NODE_ENV);
       // exit from application
       process.exit(1);
     }

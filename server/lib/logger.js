@@ -1,56 +1,84 @@
-const config = require('../../config/config');
-const morgan = require('morgan');
-// const winston = require('../config/winston');
+// dependencies
+const _ = require('lodash');
+const winston = require('winston');
 
 class Logger
 {
-  // constructor(winston) {
-  //   // this.logger = new
-  // }
 
-  load() {
-    // Instantiating the default winston application logger with the Console
-    // transport
-    // var logger = new winston.Logger({
-    //   transports: [
-    //     new winston.transports.Console({
-    //       level: 'info',
-    //       colorize: true,
-    //       showLevel: true,
-    //       handleExceptions: true,
-    //       humanReadableUnhandledException: true
-    //     })
-    //   ],
-    //   exitOnError: false
-    // });
+  // constructor() { }
 
-    // var logger = new (winston.Logger)({
-    //   transports: [
-    //     new (winston.transports.Console)(),
-    //     new (winston.transports.File)({ filename: 'somefile.log' })
-    //   ]
-    // });
-
-    // Enable logger (morgan) if enabled in the configuration file
-    // if (_.has(config, 'log.format')) {
-    //   app.use(morgan(logger.getLogFormat(), logger.getMorganOptions()));
-    // }
-    // // request logging. dev: console | production: file
-    // app.use(morgan(logs));
+  init() {
+    // add logger with no transports by default
+    this.logger = new winston.Logger({
+      level: 'debug',
+      // format: winston.format.json(),
+      transports: [],
+      exitOnError: false
+    });
   }
 
-  log() {
+  /**
+   * load
+   * @param {object} config
+   */
+  load(config) {
+    // check file & console log
+    if (config.log.consoleLog) {
+      this._addConsoleLog(config);
+    }
+    if (config.log.fileLog) {
+      this._addFileLog(config);
+    }
+
+    return this;
   }
 
-  error() {
+  _addConsoleLog(config) {
+    return this.logger.add(winston.transports.Console, {
+      colorize: true,
+      showLevel: true,
+      handleExceptions: true,
+      humanReadableUnhandledException: true
+    });
   }
 
-  info() {
+  _addFileLog(config) {
+    return this.logger.add(winston.transports.File, {
+      filename: config.log.logPath,
+      colorize: true,
+      timestamp: true,
+      maxsize: config.log.maxsize,
+      maxFiles: config.log.maxFiles,
+      json: config.log.json,
+      eol: '\n',
+      tailable: true,
+      showLevel: true,
+      handleExceptions: true,
+      humanReadableUnhandledException: true
+    });
   }
 
-  warning() {
+  getMorganStream() {
+    return {
+      stream: {
+        write: (msg) => {
+          this.logger.info(msg);
+        }
+      }
+    };
   }
 
+  log(level, msg, params={}) {
+    this.logger.log(level, msg, params);
+  }
+
+  info(msg, params={}) {
+    this.logger.info(msg, params);
+  }
+
+  error(msg, params={}) {
+    this.logger.error(msg, params);
+  }
 }
 
 module.exports = Logger;

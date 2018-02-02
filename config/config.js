@@ -5,6 +5,7 @@ const fs = require('fs');
 const chalk = require('chalk');
 
 const Env = require('./env/env');
+const Log = require('./lib/log');
 const Asset = require('./assets/asset');
 
 /**
@@ -16,6 +17,7 @@ class Config
   constructor() {
     this.env = new Env();
     this.asset = new Asset();
+    this.log = new Log();
     this.package = {};
   }
 
@@ -35,6 +37,9 @@ class Config
   load() {
     // load env variables
     this.env.load();
+
+    // load log format & path
+    this.log.load(this.env.variables);
 
     // validate env variables
     this._validateEnvVariables(this.env.variables);

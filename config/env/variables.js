@@ -22,6 +22,8 @@ module.exports = {
   host: process.env.HOST,
   // URL. ex: https://www.myapp.com (including port if required).
   domain: process.env.DOMAIN,
+  // application debug for local & development env
+  debug: process.env.DEBUG,
   // DB configurations - mongodb://localhost:27017/db-name
   db: {
     // mongodb connection uri
@@ -45,7 +47,9 @@ module.exports = {
     // expire time for token
     jwtExpire: process.env.JWT_EXPIRE
   },
-  // logging with Morgan - https://github.com/expressjs/morgan
+  // logging with Morgan & Winston
+  // - https://github.com/expressjs/morgan
+  // - https://github.com/winstonjs/winston
   log: {
     // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
     format: process.env.LOG_FORMAT,
@@ -56,21 +60,11 @@ module.exports = {
       maxsize: process.env.LOG_MAX_SIZE,
       maxFiles: process.env.LOG_MAX_FILES,
       json: process.env.LOG_JSON
-    }
+    },
+    level: process.env.LOG_LEVEL,
+    consoleLog: process.env.LOG_IN_CONSOLE,
+    fileLog: process.env.LOG_IN_FILE
   },
-  // // logging configurations for Winston - https://github.com/winstonjs/winston
-  // logger: {
-  //   // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
-  //   format: process.env.LOG_FORMAT,
-  //   // file logger configurations
-  //   fileLogger: {
-  //     directoryPath: process.env.LOG_PATH,
-  //     fileName: process.env.LOG_FILE,
-  //     maxsize: 10485760,
-  //     maxFiles: 2,
-  //     json: false
-  //   }
-  // },
   // mailing with nodemailer - https://github.com/nodemailer/nodemailer
   mailer: {
     from: process.env.MAILER_FROM,

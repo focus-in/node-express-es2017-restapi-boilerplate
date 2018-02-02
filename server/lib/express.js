@@ -1,18 +1,22 @@
 // dependencies
 const cors = require('cors');
+const morgan = require('morgan');
 const helmet = require('helmet');
 const express = require('express');
 const compress = require('compression');
 const queryType = require('query-types');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-// const assets = require('../config/assets/assets');
+
+const logger = require('./logger');
 
 class Express
 {
 
   constructor() {
     this.express = express();
+    // default port
+    this.port = 3000;
   }
 
   init() {
@@ -31,37 +35,29 @@ class Express
     return this;
   }
 
-  load(config) {
+  load(config, logger) {
 
     // allow CORS
     this._allowCORS(config);
 
     // enable logger
-    this._enableLogger(config);
+    this._enableLogger(config, logger);
 
     // load local variable to request object
     this._loadLocalVariables(config);
+
+    // load port from config
+    this.port = config.env.variables.port;
 
     return this;
   }
 
 
-  start(config, db) {
-
+  start() {
     // Start the app by listening on <port>
-    this.express.listen(config.port, () => {
-      // Logging initialization
-      console.log('--');
-      console.log(chalk.green(config.app.title));
-      console.log(chalk.green(`Environment:\t\t\t ${config.env}`));
-      console.log(chalk.green(`Port:\t\t\t\t ${config.port}`));
-      console.log(chalk.green(`Database:\t\t\t\t ${db.uri}`));
-      if (typeof config.app.secure.ssl !== 'undefined') {
-        console.log(chalk.green('HTTPs:\t\t\t\ton'));
-      }
-      console.log(chalk.green(`App version:\t\t\t ${config.meanjs.version}`));
-      console.log('--');
-    });
+    this.express.listen(this.port);
+
+    return this;
   }
 
   /**
@@ -86,7 +82,7 @@ class Express
     this.express.use(methodOverride());
 
     // query parser middleware
-    app.use(queryType.middleware());
+    this.express.use(queryType.middleware());
 
   }
 
@@ -144,17 +140,8 @@ class Express
   /**
    * enable api access log with morgan
    */
-  _enableLogger(config) {
-    this.express.use(morgan(
-      config.env.variables.log.format,
-      {
-        stream: {
-          write: function (msg) {
-            logger.info(msg);
-          }
-        }
-      },
-      config.env.variables.log.format));
+  _enableLogger(config, logger) {
+    this.express.use(morgan(config.log.logFormat, logger.getMorganStream()));
   }
 
 
@@ -164,11 +151,6 @@ class Express
       app.locals.cache = 'memory';
     }
   }
-
-
-  // console.log(chalk.white('--'));
-  // console.log(chalk.green(msg.INFO.APP_RUNNING_ENV));
-  // console.log(chalk.white('--'));
 
 }
 

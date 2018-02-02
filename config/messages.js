@@ -10,7 +10,8 @@ module.exports = {
   },
 
   WARNING: {
-    NO_NODE_ENV: `WARNING: NODE_ENV is not defined! Using default (%s) environment.`
+    NO_NODE_ENV: `WARNING: NODE_ENV is not defined! Using default (%s) environment.`,
+    INVALID_LOG_FORMAT: `WARNING: Invalid log format! Using the default format %s`
   },
 
   INFO: {

@@ -1,4 +1,5 @@
 // dependencies.
+const _ = require('lodash');
 const chalk = require('chalk');
 const Promise = require('bluebird');
 const mongoose = require('mongoose');
@@ -7,9 +8,7 @@ const mongoose = require('mongoose');
 class Mongoose
 {
 
-  // constructor() {
-
-  // }
+  // constructor() { }
 
   init() {
     this.db = {};
@@ -18,13 +17,13 @@ class Mongoose
     mongoose.Promise = Promise;
   }
 
-  load(config) {
+  load(config, logger) {
     // get only the db Config values
     const dbConfig = config.env.variables.db;
     // set db connect uri
-    this.db.uri = _setDbUri(dbConfig);
+    this.db.uri = this._setDbUri(dbConfig);
     // define db config options
-    this.db.options = _defineDbOptions(dbConfig);
+    this.db.options = this._defineDbOptions(dbConfig);
     // db debug config
     this.db.debug = dbConfig.debug;
   }
@@ -74,7 +73,6 @@ class Mongoose
   _defineDbOptions(dbConfig) {
     let dbOptions = {
       useMongoClient: true,
-      autoIndex: false, // Don't build indexes
       reconnectTries: 5, // stop trying after 5 reconnect
       reconnectInterval: 500, // Reconnect every 500ms
       poolSize: 10, // Maintain up to 10 socket connections
@@ -89,8 +87,8 @@ class Mongoose
   }
 
   // Initialize Mongoose
-  _connect(cb) {
-
+  _connect() {
+    // mongoose connect to connect with mongoDB
     mongoose.connect(this.db.uri, this.db.options, (err) => {
       // Log Error
       if (err) {
@@ -101,8 +99,7 @@ class Mongoose
         // Enabling mongoose debug mode if required
         mongoose.set('debug', this.db.debug);
 
-        // Call callback FN
-        if (cb) cb(db);
+        console.log('MongoDB started!!');
       }
     });
 

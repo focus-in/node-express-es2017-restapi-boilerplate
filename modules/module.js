@@ -4,37 +4,58 @@ class Module
 {
 
   load(config) {
-    console.log(config);
-    // // load Module configuration files
-    // this._loadModuleConfigs();
 
-    // // Load modules routes files
-    // this._loadModuleRoutes();
+    // asset to current property
+    this.asset = config.asset;
+
+    // load Module models files
+    this._loadModuleModels();
+    // Load modules routes files
+    this._loadModuleRoutes();
+    // load Module configuration files
+    this._loadModuleConfigs();
+    // Load modules events files
+    this._loadModuleEvents();
+    // load Module helpers files
+    this._loadModuleHelpers();
 
     return this;
   }
 
   /**
-   * Invoke module configuration
+   * Invoke module models
    */
-  _loadModuleConfigs() {
-    assets.load('config', this.express);
+  _loadModuleModels() {
+    this.asset.load('models');
   }
 
   /**
    * Invoke module routes
    */
   _loadModuleRoutes() {
-    assets.load('routes', this.express);
+    this.asset.load('routes');
   }
 
+  /**
+   * Invoke module configurations
+   */
+  _loadModuleConfigs() {
+    this.asset.load('configs');
+  }
 
+  /**
+   * Invoke module events
+   */
+  _loadModuleEvents() {
+    this.asset.load('events');
+  }
 
-  // console.log(chalk.white('--'));
-  // console.log(chalk.green(msg.INFO.APP_RUNNING_ENV));
-  // console.log(chalk.white('--'));
-
-
+  /**
+   * Invoke module helpers
+   */
+  _loadModuleHelpers() {
+    this.asset.load('helpers');
+  }
 
 }
 

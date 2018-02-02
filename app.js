@@ -33,6 +33,8 @@ class App
   load() {
     // load config libraries
     this.config.load();
+    // load the server with config
+    this.server.load(this.config);
     // load modules default files
     this.module.load(this.config);
 
@@ -41,7 +43,8 @@ class App
 
   // start application servers
   start() {
-    console.log('will begin start');
+    // console.log('will begin start');
+    this.server.start(this.config);
     // open mongoose connection
     // mongoose.connect();
 
